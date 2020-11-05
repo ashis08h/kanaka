@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Create University</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+body {
+  font-family: sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Add padding to containers */
+.container {
+  padding: 16px;
+  background-color: white;
+  width:45%;
+}
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 11px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #f1f1f1;
+}
+
+input[type=text]:focus, input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+/* Overwrite default styles of hr */
+hr {
+  border: 1px solid #f1f1f1;
+  margin-bottom: 25px;
+}
+
+/* Set a style for the submit button */
+.create-btn {
+  background-color: #337dff;
+  color: white;
+  padding: 16px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 10%;
+  opacity: 0.9;
+}
+
+.create-btn:hover {
+  opacity: 1;
+}
+
+/* Add a blue text color to links */
+a {
+  color: dodgerblue;
+}
+
+/* Set a grey background color and center the text of the "sign in" section */
+.signin {
+  background-color: #f1f1f1;
+  text-align: center;
+}
+</style>
+</head>
+<body>
+
+    <form method="POST"  action="{% url 'create_university' %}" name="createForm" onsubmit="return(validate());">
+        {% csrf_token %}
+        <div class="container">
+            <h1>Create University</h1>
+            <p>Please fill in this form to create an university.</p>
+            <hr>
+            <div class="form-group">
+            <label for="name"><b>name</b></label>
+                <input type="text" placeholder="Enter Name" name="name" id="name" value="" required></div>
+
+            <label for="district"><b>Enter District</b></label>
+            <input type="text" placeholder="Enter district" name="district" id="district" value = "" required>
+
+            <label for="state"><b>Enter State</b></label>
+            <input type="text" placeholder="state" name="state" id="state" value="" required><br>
+
+            <label for="pincode"><b>Enter Pincode</b></label>
+            <input type="text" placeholder="pincode" name="pincode" id="pincode" value="" required>
+
+            <label for="address"><b>Address</b></label>
+            <textarea placeholder="Enter Address" name="address" id="address" value="" required></textarea>
+            <hr>
+
+            <input type="submit" class="create-btn" value="Create"/>
+            </div>
+    </form>
+
+</body>
+
+<script type = "text/javascript">
+   <!--
+      // Form validation code will come here.
+      function validate() {
+
+         if( document.createForm.name.value == "" ) {
+            alert( "Please provide your name!" );
+            document.createForm.Name.focus() ;
+            return false;
+         }
+         if( document.createForm.name.value.length > 30 ) {
+            alert( "Maximum length of name is 30." );
+            document.createForm.name.focus() ;
+            return false;
+         }
+         if( document.createForm.district.value == "" ) {
+            alert( "Please provide your district!" );
+            document.createForm.district.focus() ;
+            return false;
+         }
+         if( document.createForm.district.value.length > 20 ) {
+            alert( "Maximum length of district is 20." );
+            document.createForm.district.focus() ;
+            return false;
+         }
+         if( document.createForm.state.value == "" ) {
+            alert( "Please provide your state!" );
+            document.createForm.state.focus() ;
+            return false;
+         }
+         if( document.createForm.state.value.length > 20 ) {
+            alert( "Maximum length of state is 20." );
+            document.createForm.state.focus() ;
+            return false;
+         }
+         if( document.createForm.address.value == "" ) {
+            alert( "Please provide your address!" );
+            document.createForm.address.focus() ;
+            return false;
+         }
+         if( document.createForm.address.value.length > 256 ) {
+            alert( "Maximum length of address is 256." );
+            document.createForm.address.focus() ;
+            return false;
+         }
+         if( document.createForm.pincode.value == "" ) {
+            alert( "Please provide your pincode!" );
+            document.createForm.pincode.focus() ;
+            return false;
+         }
+         if( document.createForm.pincode.value.length > 8 ) {
+            alert( "Maximum length of pincode is 20." );
+            document.createForm.pincode.focus() ;
+            return false;
+         }
+         return( true );
+      }
+   //-->
+</script>
+
+</html>

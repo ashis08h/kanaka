@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/../css/style.css">
+    <style>.table th, .table td { max-width: 200px; min-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .display_message{
+        padding-top: 18px;
+        font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>List of Students</h2>
+        <div class="row">
+            <div class="col-md-10">
+                <form class="wrapper-search-input" method="POST" action="{% url 'fetch_student_list' %}">
+                {% csrf_token %}
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control form-change" placeholder="Search for a student"
+                        aria-label="Enter Student Name To Search For" value="{{name}}" name="name" {{onclick_attrib}}/>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <button style="color:#337dff;" onclick="goBack()">back</a></button>
+            </div>
+        </div>
+        <div class="row"></div>
+        <table class="table table-bordered" style="margin-top: 22px;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                <th>Student name</th>
+                <th>College</th>
+                <th>Address</th>
+                <th>District</th>
+                <th>State</th>
+                <th>Pincode</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{student.id}}</td>
+                    <td>{{student.name }}</td>
+                    <td>{{student.university}}</td>
+                    <td>{{ student.address }}</td>
+                    <td>{{ student.district }}</td>
+                    <td>{{ student.state }}</td>
+                    <td>{{ student.pincode }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+</table>
+    <div class="row">
+        <div class="col-md-4">
+            {% if total_student_count == 0 %}
+                <P>No Student Found.</P>
+            {% elif total_student_count == 1 %}
+                <p>{{total_student_count}} student found.</p>
+            {% else %}
+                <p class="display_message">Showing {{start_index}} to {{last_index}} students out of {{total_student_count}} students.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+
+            {% if students.has_other_pages %}
+                <ul class="pagination">
+                    {% if students.has_previous %}
+                        <li><a href="?page={{ students.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                    {% endif %}
+                    {% for i in students.paginator.page_range %}
+                        {% if students.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if students.has_next %}
+                        <li><a href="?page={{ students.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+</body>
+</html>

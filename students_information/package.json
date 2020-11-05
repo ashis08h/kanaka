@@ -1,0 +1,15 @@
+{
+  "name": "students_information",
+  "version": "1.0.0",
+  "description": "I am starting with sass hope it goes all:)",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "node-sass": "^4.14.1"
+  },
+  "scripts": {
+    "compile:sass" : "node-sass static/students/scss/style.scss static/students/css/style.css "
+  },
+  "author": "kanaka",
+  "license": "ISC"
+}

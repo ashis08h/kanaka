@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/../css/style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <style>.table th, .table td { max-width: 200px; min-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .display_message{
+        padding-top: 18px;
+        font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>University List</h2>
+        <div class="row">
+            <div class="col-md-10">
+                <form class="wrapper-search-input" method="POST" action="{% url 'fetch_univesity_list' %}">
+                {% csrf_token %}
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control form-change" placeholder="Search for a university"
+                        aria-label="Enter Course Name To Search For" value="{{name}}" name="name" {{onclick_attrib}}/>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <button style="color:#337dff;"><a href="{% url 'create_university_form' %}">+Create University</a></button>
+            </div>
+        </div>
+        <div class="row"></div>
+        <table class="table table-bordered" style="margin-top: 22px;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                <th>University name</th>
+                <th>Address</th>
+                <th>District</th>
+                <th>State</th>
+                <th>Pincode</th>
+                <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for university in universities %}
+                <tr>
+                    <td>{{university.id}}</td>
+                    <td class="data_elipsis">{{ university.name }}</td>
+                    <td>{{ university.address }}</td>
+                    <td>{{ university.district }}</td>
+                    <td>{{ university.state }}</td>
+                    <td>{{ university.pincode }}</td>
+                    <td>
+                        <button onclick="location.href={% url 'create_university_form' university.id %}"><span align="left">Edit</i></span></button>
+                        <button onclick="location.href={% url 'fetch_college_list' %}"><span align="right">View</i></span></button>
+
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+</table>
+    <div class="row">
+        <div class="col-md-4">
+            {% if total_university_count == 0 %}
+                <P>No University Found.</P>
+            {% elif total_university_count == 1 %}
+                <p>{{total_university_count}} university found.</p>
+            {% else %}
+                <p class="display_message">Showing {{start_index}} to {{last_index}} universities out of {{total_university_count}} universities.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+
+            {% if universities.has_other_pages %}
+                <ul class="pagination">
+                    {% if universities.has_previous %}
+                        <li><a href="?page={{ universities.previous_page_number }}">&laquo;</a></li>
+                    {% elif name != "None" and universities.has_previous%}
+                        <li><a href="?page={{universities.previous_page_number}}&name={{name}}">&laquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                    {% endif %}
+                    {% for i in universities.paginator.page_range %}
+                        {% if universities.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% elif name %}
+                            <li> <a href="?page={{i}}&name={{name}}" data-toggle="tooltip" title="{{i}}">{{i}}</a></li>
+                        {% else %}
+                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if universities.has_next %}
+                        <li><a href="?page={{ universities.next_page_number }}">&raquo;</a></li>
+                    {% elif name != "None" and universities.has_next%}
+                        <li><a href="?page={{universities.next_page_number}}&name={{name}}">&raquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

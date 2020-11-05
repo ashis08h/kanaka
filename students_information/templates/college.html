@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/../css/style.css">
+    <style>.table th, .table td { max-width: 200px; min-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .display_message{
+        padding-top: 18px;
+        font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>List of Colleges</h2>
+        <div class="row">
+            <div class="col-md-10">
+                <form class="wrapper-search-input" method="POST" action="{% url 'fetch_college_list' %}">
+                {% csrf_token %}
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control form-change" placeholder="Search for a college"
+                        aria-label="Enter Course Name To Search For" value="{{name}}" name="name" {{onclick_attrib}}/>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <button style="color:#337dff;" onclick="goBack()">back</a></button>
+            </div>
+        </div>
+        <div class="row"></div>
+        <table class="table table-bordered" style="margin-top: 22px;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                <th>College name</th>
+                <th>University</th>
+                <th>Address</th>
+                <th>District</th>
+                <th>State</th>
+                <th>Pincode</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for college in colleges %}
+                <tr>
+                    <td>{{college.id}}</td>
+                    <td>{{college.name }}</td>
+                    <td>{{college.university}}</td>
+                    <td>{{ college.address }}</td>
+                    <td>{{ college.district }}</td>
+                    <td>{{ college.state }}</td>
+                    <td>{{ college.pincode }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+</table>
+    <div class="row">
+        <div class="col-md-4">
+            {% if total_college_count == 0 %}
+                <P>No College Found.</P>
+            {% elif total_college_count == 1 %}
+                <p>{{total_college_count}} college found.</p>
+            {% else %}
+                <p class="display_message">Showing {{start_index}} to {{last_index}} colleges out of {{total_college_count}} colleges.</p>
+            {% endif %}
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+
+            {% if colleges.has_other_pages %}
+                <ul class="pagination">
+                    {% if colleges.has_previous %}
+                        <li><a href="?page={{ colleges.previous_page_number }}">&laquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&laquo;</span></li>
+                    {% endif %}
+                    {% for i in colleges.paginator.page_range %}
+                        {% if colleges.number == i %}
+                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                        {% else %}
+                            <li><a href="?page={{ i }}">{{ i }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                    {% if colleges.has_next %}
+                        <li><a href="?page={{ colleges.next_page_number }}">&raquo;</a></li>
+                    {% else %}
+                        <li class="disabled"><span>&raquo;</span></li>
+                    {% endif %}
+                </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+</html>
