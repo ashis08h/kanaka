@@ -33,16 +33,16 @@
             </div>
         </div>
         <div class="row"></div>
-        <table class="table table-bordered" style="margin-top: 22px;">
+        <table class="table table-bordered table-striped table-responsive-sm" style="margin-top: 22px;">
             <thead>
                 <tr>
                     <th>#</th>
-                <th>Student name</th>
-                <th>College</th>
-                <th>Address</th>
-                <th>District</th>
-                <th>State</th>
-                <th>Pincode</th>
+                    <th>Student name</th>
+                    <th>College</th>
+                    <th>Roll Number</th>
+                    <th>Gender</th>
+                    <th>Class Name</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,11 +50,11 @@
                 <tr>
                     <td>{{student.id}}</td>
                     <td>{{student.name }}</td>
-                    <td>{{student.university}}</td>
-                    <td>{{ student.address }}</td>
-                    <td>{{ student.district }}</td>
-                    <td>{{ student.state }}</td>
-                    <td>{{ student.pincode }}</td>
+                    <td>{{student.college__name}}</td>
+                    <td>{{ student.roll_number }}</td>
+                    <td>{{ student.gender }}</td>
+                    <td>{{ student.class_name }}</td>
+                    <td><button><a href="{% url 'fetch_student_information' %}?id={{student.id}}">Student Details</a></button></td>
                 </tr>
                 {% endfor %}
             </tbody>

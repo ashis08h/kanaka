@@ -20,8 +20,8 @@
     <div class="container">
         <h2>University List</h2>
         <div class="row">
-            <div class="col-md-10">
-                <form class="wrapper-search-input" method="POST" action="{% url 'fetch_univesity_list' %}">
+            <div class="col-md-8">
+                Search:<form class="wrapper-search-input" method="POST" action="{% url 'fetch_univesity_list' %}">
                 {% csrf_token %}
                     <div class="input-group input-group-lg">
                         <input type="text" class="form-control form-change" placeholder="Search for a university"
@@ -30,11 +30,15 @@
                 </form>
             </div>
             <div class="col-md-2">
+                <button style="color:#337dff;"><a href="{% url 'logout' %}">logout</a></button>
+            </div>
+            <div class="col-md-2">
                 <button style="color:#337dff;"><a href="{% url 'create_university_form' %}">+Create University</a></button>
             </div>
         </div>
         <div class="row"></div>
-        <table class="table table-bordered" style="margin-top: 22px;">
+
+        <table class="table table-bordered table-striped table-responsive-sm" style="margin-top: 22px;">
             <thead>
                 <tr>
                     <th>#</th>
@@ -56,14 +60,16 @@
                     <td>{{ university.state }}</td>
                     <td>{{ university.pincode }}</td>
                     <td>
-                        <button onclick="location.href={% url 'create_university_form' university.id %}"><span align="left">Edit</i></span></button>
-                        <button onclick="location.href={% url 'fetch_college_list' %}"><span align="right">View</i></span></button>
+                        <button><span align="left" onclick="location.href={% url 'create_university_form' %}">Edit</i></span></button>
+                        <button>
+                            <a href="{% url 'fetch_college_list' %}?university={{university.id}}"><span align="right">View</span></a></button>
 
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
 </table>
+
     <div class="row">
         <div class="col-md-4">
             {% if total_university_count == 0 %}
@@ -107,7 +113,6 @@
         </div>
     </div>
 </div>
-
 
 </body>
 </html>

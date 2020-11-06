@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=256)),
                 ('roll_number', models.CharField(max_length=128)),
-                ('gender', models.CharField(choices=[('F', 'Female'), ('M', 'Male')], default='M', max_length=1)),
+                ('gender', models.CharField(choices=[('Female', 'Female'), ('Male', 'Male')], default='M', max_length=1)),
                 ('class_name', models.CharField(db_index=True, max_length=256)),
                 ('college', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='students.CollegeModel')),
             ],

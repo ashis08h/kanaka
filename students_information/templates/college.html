@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="row"></div>
-        <table class="table table-bordered" style="margin-top: 22px;">
+        <table class="table table-bordered table-striped table-responsive-sm" style="margin-top: 22px;">
             <thead>
                 <tr>
                     <th>#</th>
@@ -43,6 +43,7 @@
                 <th>District</th>
                 <th>State</th>
                 <th>Pincode</th>
+                 <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -50,11 +51,12 @@
                 <tr>
                     <td>{{college.id}}</td>
                     <td>{{college.name }}</td>
-                    <td>{{college.university}}</td>
+                    <td>{{college.university__name}}</td>
                     <td>{{ college.address }}</td>
                     <td>{{ college.district }}</td>
                     <td>{{ college.state }}</td>
                     <td>{{ college.pincode }}</td>
+                    <td><button><a href="{% url 'fetch_student_list' %}?college={{college.id}}">View of Students</a> </button></td>
                 </tr>
                 {% endfor %}
             </tbody>

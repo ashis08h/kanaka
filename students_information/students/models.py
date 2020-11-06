@@ -15,8 +15,8 @@ class UniversityModel(models.Model):
     state = models.CharField(max_length=256, null=False, db_index=True)
     pincode = models.CharField(max_length=128)
 
-    def __str__(self):
-        return self.name
+    def __int__(self):
+        return self.id
 
 
 class CollegeModel(models.Model):
@@ -32,13 +32,13 @@ class CollegeModel(models.Model):
     state = models.CharField(max_length=256, null=False,db_index=True)
     pincode = models.CharField(max_length=128)
 
-    def __str__(self):
-        return self.name
+    def __int__(self):
+        return self.id
 
 
 GENDER = (
-    ('F', 'Female'),
-    ('M', 'Male'),
+    ('Female', 'Female'),
+    ('Male', 'Male'),
     )
 
 
@@ -51,8 +51,8 @@ class StudentModel(models.Model):
     college = models.ForeignKey(CollegeModel, on_delete=models.CASCADE)
     name = models.CharField(max_length=256, null=False)
     roll_number = models.CharField(max_length=128, null=False)
-    gender = models.CharField(max_length=1, choices=GENDER, default="M")
+    gender = models.CharField(max_length=6, choices=GENDER, default="M")
     class_name = models.CharField(max_length=256, null=False,db_index=True)
 
-    def __str__(self):
-        return self.name
+    def __int__(self):
+        return self.id

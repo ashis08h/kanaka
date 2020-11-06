@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Title</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/../css/style.css">
+    <style>.table th, .table td { max-width: 200px; min-width: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .display_message{
+        padding-top: 18px;
+        font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Students information</h2>
+        <div class="row">
+            <div class="col-md-10">
+
+            </div>
+            <div class="col-md-2">
+                <button style="color:#337dff;" onclick="goBack()">back</a></button>
+            </div>
+        </div>
+        <div class="row"></div>
+
+        <table class="table table-bordered table-striped table-responsive-sm">
+            {% for student in students %}
+                <tbody>
+                    <tr>
+                        <td>Student name :</td>
+                        <td>{{student.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>College :</td>
+                        <td>{{student.college__name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Roll Number :</td>
+                        <td>{{student.roll_number}}</td>
+                    </tr>
+                    <tr>
+                        <td>Gender :</td>
+                        <td>{{student.gender}}</td>
+                    </tr>
+                    <tr>
+                        <td>Class Name : :</td>
+                        <td>{{student.class_name}}</td>
+                    </tr>
+                </tbody>
+            {% endfor %}
+        </table>
+    </div>
+<script>
+function goBack() {
+  window.history.back();
+}
+</script>
+</body>
+</html>

@@ -35,6 +35,12 @@ def login(request):
     return render(request, "index.html")
 
 
+def logout(request):
+    auth.logout(request)
+    success_message = "Logout successfully."
+    return redirect(success, success_message)
+
+
 def error(request, error_message):
     """
     Method to display error messages.
@@ -129,48 +135,50 @@ def fetch_univesity_list(request):
     search_university_qs = None
     name = None
 
-    name = request.GET.get('name')
-    if request.method == "POST":
-        name = request.POST.get("name")
+    if not request.user.is_authenticated:
+        return redirect('login')
 
-    print(name)
-
-    if name is not None:
-        university_qs = UniversityModel.objects.filter(name__icontains=name).order_by('id')
     else:
-        university_qs = UniversityModel.objects.all().order_by('id')
 
-    if university_qs is not None and university_qs.exists:
-        total_university_count = university_qs.count()
+        if request.method == "POST":
+            name = request.POST.get("name")
 
-    page_size = 5
-    page = request.GET.get('page', 1)
-    if page is not None:
-        current_page = int(page)
+        if name is not None:
+            university_qs = UniversityModel.objects.filter(name__icontains=name).order_by('id')
+        else:
+            university_qs = UniversityModel.objects.all().order_by('id')
 
-    paginator = Paginator(university_qs, page_size)
-    try:
-        universities = paginator.page(page)
-    except PageNotAnInteger:
-        universities = paginator.page(1)
-    except EmptyPage:
-        universities = paginator.page(paginator.num_pages)
+        if university_qs is not None and university_qs.exists:
+            total_university_count = university_qs.count()
 
-    print(paginator.num_pages)
-    start_index = (current_page - 1) * page_size + 1
-    last_index = current_page * page_size
-    if current_page == paginator.num_pages:
-        last_index = total_university_count
+        page_size = 5
+        page = request.GET.get('page', 1)
+        if page is not None:
+            current_page = int(page)
 
-    context = {
-        'universities': universities,
-        'total_university_count': total_university_count,
-        'name': name,
-        'start_index': start_index,
-        'last_index': last_index,
-    }
+        paginator = Paginator(university_qs, page_size)
+        try:
+            universities = paginator.page(page)
+        except PageNotAnInteger:
+            universities = paginator.page(1)
+        except EmptyPage:
+            universities = paginator.page(paginator.num_pages)
 
-    return render(request, 'university.html', context)
+        print(paginator.num_pages)
+        start_index = (current_page - 1) * page_size + 1
+        last_index = current_page * page_size
+        if current_page == paginator.num_pages:
+            last_index = total_university_count
+
+        context = {
+            'universities': universities,
+            'total_university_count': total_university_count,
+            'name': name,
+            'start_index': start_index,
+            'last_index': last_index,
+        }
+
+        return render(request, 'university.html', context)
 
 
 def fetch_college_list(request):
@@ -182,20 +190,21 @@ def fetch_college_list(request):
 
     college_qs = None
     total_college_count = 0
-    search_college_qs = None
     name = None
-    id = None
+    university = None
 
-    id = request.GET.get(id)
+    university = request.GET['university']
+
     if request.method == "POST":
         name = request.POST.get("name")
 
-    
-
     if name is not None:
-        college_qs = CollegeModel.objects.filter(name__contains=name).order_by('id')
+        college_qs = CollegeModel.objects.filter(name__contains=name).values('id', 'name', 'university__name', 'district','address', 'pincode', 'state').order_by('id')
     else:
-        college_qs = CollegeModel.objects.all().order_by('id')
+        college_qs = CollegeModel.objects.values('id', 'name', 'university__name', 'district','address', 'pincode', 'state').order_by('id')
+    if university is not None:
+        college_qs = CollegeModel.objects.filter(university__id=university).\
+            values('id', 'name', 'university__name', 'district','address', 'pincode', 'state').order_by('id')
 
     if college_qs is not None and college_qs.exists:
         total_college_count = college_qs.count()
@@ -206,7 +215,6 @@ def fetch_college_list(request):
     page = request.GET.get('page', 1)
     if page is not None:
         current_page = int(page)
-    page = request.GET.get('page', 1)
 
     paginator = Paginator(college_qs, page_size)
     try:
@@ -216,7 +224,6 @@ def fetch_college_list(request):
     except EmptyPage:
         colleges = paginator.page(paginator.num_pages)
 
-    print(paginator.num_pages)
     start_index = (current_page - 1) * page_size + 1
     last_index = current_page * page_size
     if current_page == paginator.num_pages:
@@ -227,7 +234,7 @@ def fetch_college_list(request):
         'total_university_count': total_college_count,
         'start_index': start_index,
         'last_index': last_index,
-
+        'university':university,
     }
 
     return render(request, 'college.html', context)
@@ -242,18 +249,26 @@ def fetch_student_list(request):
 
     student_qs = None
     total_student_count = 0
-    search_student_qs = None
     name = None
+    college = None
+
+    print(request)
+    college = request.GET['college']
+
     if request.method == "POST":
         name = request.POST.get("name")
 
     if name is not None:
-        student_qs = StudentModel.objects.filter(name__contains=name).order_by('id')
+        student_qs = StudentModel.objects.filter(name__contains=name).values('id', 'name', 'college__name',
+                                                                             'roll_number', 'gender', 'class_name',).order_by('id')
     else:
-        student_qs = StudentModel.objects.all().order_by('id')
+        student_qs = StudentModel.objects.values('id', 'name', 'college__name', 'roll_number', 'gender', 'class_name',).order_by('id')
+    if college is not None:
+        student_qs = StudentModel.objects.filter(college__id=college). \
+            values('id', 'name', 'college__name', 'roll_number', 'gender', 'class_name',).order_by('id')
 
     if student_qs is not None and student_qs.exists:
-        total_college_count = student_qs.count()
+        total_student_count = student_qs.count()
 
     print(student_qs)
 
@@ -288,8 +303,19 @@ def fetch_student_list(request):
     return render(request, 'student.html', context)
 
 
+def fetch_student_information(request):
+    """
+    Method to display Student information
+    """
+    id = None
 
-
+    print(request)
+    id = request.GET['id']
+    if id is not None:
+        students = StudentModel.objects.filter(id=id).values('id', 'name', 'college__name', 'roll_number', 'gender', 'class_name',)
+    else:
+        return HttpResponse(status=404, content="student information is not found.")
+    return render(request, 'Student_information.html', {'students':students})
 
 
 
